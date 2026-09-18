@@ -160,122 +160,138 @@ const App = () => {
   };
 
   return (
-    <div>
-      {/* Top Header */}
-      <header className="header">
-        <h1>Tic Tac Toe</h1>
-        <p>A beautifully synthesized 2-player gaming arena</p>
-      </header>
+    <div className="liquid-canvas">
+      {/* Dynamic Liquid Mesh Orbs */}
+      <div className="liquid-orbs-container" aria-hidden="true">
+        <div className="liquid-orb orb-cyan"></div>
+        <div className="liquid-orb orb-magenta"></div>
+        <div className="liquid-orb orb-violet"></div>
+        <div className="liquid-orb orb-amber"></div>
+      </div>
 
-      {/* Main Grid Layout */}
-      <main className="game-container">
-        {/* Left Column: Settings Panel */}
-        <section>
-          <GameControls
-            boardSize={boardSize}
-            setBoardSize={setBoardSize}
-            customSymbols={customSymbols}
-            setSymbolPreset={setSymbolPreset}
-            soundEnabled={soundEnabled}
-            setSoundEnabled={setSoundEnabled}
-            theme={theme}
-            setTheme={setTheme}
-            onResetGame={() => resetGame()}
-            onResetStats={resetStats}
-          />
-        </section>
-
-        {/* Center Column: The Active Playing Arena */}
-        <section className="board-wrapper glass-panel">
-          <div className="status-bar glass-panel" style={{
-            borderColor: isGameOver ? (gameOutcome.winner === 'Tie' ? 'var(--text-secondary)' : (gameOutcome.winner === 'X' ? 'var(--color-x)' : 'var(--color-o)')) : 'var(--card-border)'
-          }}>
-            <div className="turn-indicator">
-              {!isGameOver && <span className={`turn-dot ${turnDotClass}`}></span>}
-              <span>{statusMessage}</span>
-            </div>
-            
-            {boardSize === 5 && !isGameOver && (
-              <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: 'var(--btn-bg)', borderRadius: '6px' }}>
-                4 in a row to win
-              </span>
-            )}
+      <div className="app-shell">
+        {/* Top Header */}
+        <header className="header">
+          <div className="header-badge">
+            <span className="badge-glow"></span>
+            <span className="badge-text">Liquid Glass Arena</span>
           </div>
+          <h1 className="header-title">Tic Tac Toe</h1>
+          <p className="header-subtitle">Fluid, tactile 2-player strategic gaming</p>
+        </header>
 
-          <Board
-            board={current.squares}
-            onCellClick={handleMove}
-            winningLine={gameOutcome ? gameOutcome.line : null}
-            winner={gameOutcome ? gameOutcome.winner : null}
-            disabled={isBoardDisabled}
-            customSymbols={customSymbols}
-          />
+        {/* Main Grid Layout */}
+        <main className="game-container">
+          {/* Left Column: Settings Panel */}
+          <section className="side-col left-col">
+            <GameControls
+              boardSize={boardSize}
+              setBoardSize={setBoardSize}
+              customSymbols={customSymbols}
+              setSymbolPreset={setSymbolPreset}
+              soundEnabled={soundEnabled}
+              setSoundEnabled={setSoundEnabled}
+              theme={theme}
+              setTheme={setTheme}
+              onResetGame={() => resetGame()}
+              onResetStats={resetStats}
+            />
+          </section>
 
-          {/* Winning Overlay Screen */}
-          {isGameOver && (
-            <div className="win-overlay">
-              <div className="win-symbol">
-                {gameOutcome.winner === 'Tie' ? '🤝' : (gameOutcome.winner === 'X' ? customSymbols.X : customSymbols.O)}
+          {/* Center Column: The Active Playing Arena */}
+          <section className="board-wrapper glass-panel arena-col">
+            <div className="status-bar glass-panel" style={{
+              borderColor: isGameOver ? (gameOutcome.winner === 'Tie' ? 'var(--text-secondary)' : (gameOutcome.winner === 'X' ? 'var(--color-x)' : 'var(--color-o)')) : 'var(--card-border)'
+            }}>
+              <div className="turn-indicator">
+                {!isGameOver && <span className={`turn-dot ${turnDotClass}`}></span>}
+                <span>{statusMessage}</span>
               </div>
-              <h2 className={
-                gameOutcome.winner === 'Tie' ? 'winner-tie' : (gameOutcome.winner === 'X' ? 'winner-x' : 'winner-o')
-              }>
-                {gameOutcome.winner === 'Tie' ? "It's a Tie!" : "Winner Winner!"}
-              </h2>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-                {gameOutcome.winner === 'Tie' 
-                  ? "Both players fought valiantly." 
-                  : `Player ${gameOutcome.winner === 'X' ? customSymbols.X : customSymbols.O} dominated the grid.`
-                }
-              </p>
-              <button className="btn-control active" onClick={() => resetGame()}>
-                Play Again
-              </button>
+              
+              {boardSize === 5 && !isGameOver && (
+                <span className="mode-badge">
+                  4 in a row to win
+                </span>
+              )}
             </div>
-          )}
-        </section>
 
-        {/* Right Column: Game Stats & History timeline */}
-        <section style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <Leaderboard stats={stats} customSymbols={customSymbols} />
+            <Board
+              board={current.squares}
+              onCellClick={handleMove}
+              winningLine={gameOutcome ? gameOutcome.line : null}
+              winner={gameOutcome ? gameOutcome.winner : null}
+              disabled={isBoardDisabled}
+              customSymbols={customSymbols}
+            />
 
-          {/* Time Travel Timeline */}
-          <div className="panel glass-panel">
-            <h3 className="panel-title">
-              <History size={18} />
-              Timeline
-            </h3>
-            
-            <div className="history-list">
-              {history.map((step, moveIdx) => {
-                const isSelected = moveIdx === stepNumber;
-                const playedBy = moveIdx % 2 === 1 ? 'X' : 'O';
-                const playedByCustom = playedBy === 'X' ? customSymbols.X : customSymbols.O;
-                
-                return (
-                  <button
-                    key={moveIdx}
-                    className={`history-item ${isSelected ? 'active' : ''}`}
-                    onClick={() => jumpTo(moveIdx)}
-                  >
-                    <span style={{ fontSize: '0.85rem', fontWeight: isSelected ? '700' : '400' }}>
-                      {moveIdx === 0 
-                        ? '🎬 Game Launched' 
-                        : `Move #${moveIdx}: ${playedByCustom} ${getMoveCoordinateString(step.lastMove)}`
-                      }
-                    </span>
-                    {isSelected && (
-                      <span style={{ fontSize: '0.65rem', background: 'var(--text-primary)', color: 'var(--card-bg)', padding: '0.1rem 0.3rem', borderRadius: '4px', fontWeight: 'bold' }}>
-                        Active
-                      </span>
-                    )}
+            {/* Winning Overlay Screen */}
+            {isGameOver && (
+              <div className="win-overlay">
+                <div className="win-card glass-panel">
+                  <div className="win-symbol">
+                    {gameOutcome.winner === 'Tie' ? '🤝' : (gameOutcome.winner === 'X' ? customSymbols.X : customSymbols.O)}
+                  </div>
+                  <h2 className={
+                    gameOutcome.winner === 'Tie' ? 'winner-tie' : (gameOutcome.winner === 'X' ? 'winner-x' : 'winner-o')
+                  }>
+                    {gameOutcome.winner === 'Tie' ? "It's a Draw!" : "Winner Winner!"}
+                  </h2>
+                  <p className="win-description">
+                    {gameOutcome.winner === 'Tie' 
+                      ? "Both players fought valiantly to a standstill." 
+                      : `Player ${gameOutcome.winner === 'X' ? customSymbols.X : customSymbols.O} took control of the grid.`
+                    }
+                  </p>
+                  <button className="btn-control btn-play-again" onClick={() => resetGame()}>
+                    Play Again
                   </button>
-                );
-              })}
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* Right Column: Game Stats & History timeline */}
+          <section className="side-col right-col">
+            <Leaderboard stats={stats} customSymbols={customSymbols} />
+
+            {/* Time Travel Timeline */}
+            <div className="panel glass-panel timeline-panel">
+              <h3 className="panel-title">
+                <History size={16} />
+                Timeline
+              </h3>
+              
+              <div className="history-list">
+                {history.map((step, moveIdx) => {
+                  const isSelected = moveIdx === stepNumber;
+                  const playedBy = moveIdx % 2 === 1 ? 'X' : 'O';
+                  const playedByCustom = playedBy === 'X' ? customSymbols.X : customSymbols.O;
+                  
+                  return (
+                    <button
+                      key={moveIdx}
+                      className={`history-item ${isSelected ? 'active' : ''}`}
+                      onClick={() => jumpTo(moveIdx)}
+                    >
+                      <span className="history-text">
+                        {moveIdx === 0 
+                          ? '🎬 Match Started' 
+                          : `Move #${moveIdx}: ${playedByCustom} ${getMoveCoordinateString(step.lastMove)}`
+                        }
+                      </span>
+                      {isSelected && (
+                        <span className="history-active-badge">
+                          Active
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
+      </div>
     </div>
   );
 };

@@ -35,9 +35,9 @@ const GameControls = ({
   )?.name || 'Classic';
 
   return (
-    <div className="panel glass-panel">
+    <div className="panel glass-panel controls-panel">
       <h3 className="panel-title">
-        <Settings size={18} />
+        <Settings size={16} />
         Game Settings
       </h3>
 
@@ -80,15 +80,15 @@ const GameControls = ({
       </div>
 
       {/* Quick Action Reset */}
-      <button className="btn-control active" onClick={onResetGame} style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}>
-        <RotateCcw size={16} />
+      <button className="btn-control btn-reset-match" onClick={onResetGame}>
+        <RotateCcw size={15} />
         Reset Current Match
       </button>
 
       {/* Bottom Toggles: Audio, Dark Mode, Reset Stats */}
       <div className="system-toggles">
         <button
-          className="btn-control"
+          className="btn-control icon-btn"
           onClick={() => setSoundEnabled(!soundEnabled)}
           title={soundEnabled ? 'Mute Sounds' : 'Unmute Sounds'}
         >
@@ -96,7 +96,7 @@ const GameControls = ({
         </button>
 
         <button
-          className="btn-control"
+          className="btn-control icon-btn"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
@@ -104,10 +104,9 @@ const GameControls = ({
         </button>
 
         <button
-          className="btn-control"
+          className="btn-control btn-clear-stats"
           onClick={onResetStats}
           title="Reset Leaderboard Statistics"
-          style={{ color: 'var(--color-o)' }}
         >
           Clear Stats
         </button>

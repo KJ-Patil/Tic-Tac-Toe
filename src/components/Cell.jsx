@@ -25,6 +25,7 @@ const Cell = ({ value, onClick, isWinningCell, winningPlayer, disabled, customSy
       disabled={disabled || value !== null}
       aria-label={value ? `Cell played with ${value}` : 'Empty Cell'}
     >
+      <span className="cell-glass-sheen" aria-hidden="true"></span>
       {renderSymbol()}
     </button>
   );

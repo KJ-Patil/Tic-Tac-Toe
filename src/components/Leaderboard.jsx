@@ -15,9 +15,9 @@ const Leaderboard = ({ stats, customSymbols }) => {
   const tiePercentage = calculatePercentage(stats.ties);
 
   return (
-    <div className="panel glass-panel">
+    <div className="panel glass-panel stats-panel">
       <h3 className="panel-title">
-        <Trophy size={18} style={{ color: 'var(--accent-gold)' }} />
+        <Trophy size={16} style={{ color: 'var(--accent-gold)' }} />
         Statistics
       </h3>
 
@@ -32,34 +32,27 @@ const Leaderboard = ({ stats, customSymbols }) => {
           <div className="stat-label">Wins ({customSymbols.O})</div>
         </div>
 
-        <div className="stat-box" style={{ gridColumn: 'span 2' }}>
-          <div className="stat-val" style={{ color: 'var(--text-secondary)' }}>{stats.ties}</div>
+        <div className="stat-box stat-box-ties">
+          <div className="stat-val ties">{stats.ties}</div>
           <div className="stat-label">Ties / Cat Games</div>
         </div>
       </div>
 
       {totalGames > 0 && (
-        <div className="setting-group" style={{ marginTop: '0.5rem', animation: 'scale-up 0.3s forwards' }}>
-          <label className="setting-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Win Ratio / Distribution</span>
+        <div className="stat-distribution">
+          <div className="stat-distribution-header">
+            <span>Win Ratio</span>
             <span>{totalGames} {totalGames === 1 ? 'game' : 'games'}</span>
-          </label>
+          </div>
           
           {/* Progress bar visual distribution */}
-          <div style={{
-            display: 'flex',
-            height: '10px',
-            borderRadius: '5px',
-            overflow: 'hidden',
-            background: 'var(--grid-line)',
-            marginTop: '0.25rem'
-          }}>
-            <div style={{ width: `${xPercentage}%`, background: 'var(--color-x)', transition: 'width 0.4s ease' }} title={`Player X: ${xPercentage}%`} />
-            <div style={{ width: `${tiePercentage}%`, background: 'var(--text-secondary)', transition: 'width 0.4s ease' }} title={`Ties: ${tiePercentage}%`} />
-            <div style={{ width: `${oPercentage}%`, background: 'var(--color-o)', transition: 'width 0.4s ease' }} title={`Player O: ${oPercentage}%`} />
+          <div className="stat-progress-bar">
+            <div className="liquid-fill liquid-fill-x" style={{ width: `${xPercentage}%` }} title={`Player X: ${xPercentage}%`} />
+            <div className="liquid-fill liquid-fill-tie" style={{ width: `${tiePercentage}%` }} title={`Ties: ${tiePercentage}%`} />
+            <div className="liquid-fill liquid-fill-o" style={{ width: `${oPercentage}%` }} title={`Player O: ${oPercentage}%`} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+          <div className="stat-distribution-footer">
             <span style={{ color: 'var(--color-x)' }}>{customSymbols.X}: {xPercentage}%</span>
             <span>Ties: {tiePercentage}%</span>
             <span style={{ color: 'var(--color-o)' }}>{customSymbols.O}: {oPercentage}%</span>
